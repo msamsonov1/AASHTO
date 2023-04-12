@@ -1,0 +1,53 @@
+# Input the sieve data
+sieve_sizes = [0.425, 2, 0.075]  # The list of sieve sizes
+sieve_passing = []
+
+for size in sieve_sizes:
+    passing = input("Enter the amount retained on the " + str(size) + " sieve: ")
+    sieve_passing.append(float(passing))
+
+# Calculate the LL and PI values
+percent_passing_0_425 = 100 - sieve_passing[0]
+percent_passing_40 = 100 - sieve_passing[1]
+percent_passing_no_200 = 100 - sieve_passing[2]  # Missing variable fixed
+
+ll = float(input("Enter the Liquid Limit (LL): "))
+pi = float(input("Enter the Plasticity Index (PI): "))
+
+# Calculate the group index
+if ll < 40:
+    if pi < 4:
+        gi = ll + 10 * pi
+    else:
+        gi = ll + 10 * pi + 0.1 * (percent_passing_no_200 - 10)
+else:
+    if pi < 7:
+        gi = ll + 10 * pi - 70
+    else:
+        gi = ll + 10 * pi - 70 + 0.1 * (percent_passing_no_200 - 35)**(0.5)
+
+# Determine the AASHTO classification
+if ll <= 40 and pi <= 10:
+    soil_type = "A-1-a"
+elif ll <= 40 and pi > 10:
+    soil_type = "A-1-b"
+elif 40 < ll <= 60 and pi <= 10:
+    soil_type = "A-2-4"
+elif 40 < ll <= 60 and 10 < pi <= 20:
+    soil_type = "A-2-5"
+elif 40 < ll <= 60 and pi > 20:
+    soil_type = "A-2-6"
+elif ll > 60 and pi <= 30:
+    soil_type = "A-3"
+elif ll > 60 and 30 < pi <= 50:
+    soil_type = "A-4"
+elif ll > 60 and pi > 50:
+    soil_type = "A-5"
+elif 25 < ll <= 40 and pi > 10:
+    soil_type = "A-6"
+else:
+    soil_type = "A-7"
+
+# Output the result
+print("The AASHTO soil classification is: " + soil_type)
+print("The group index (GI) is: " + str(gi))
